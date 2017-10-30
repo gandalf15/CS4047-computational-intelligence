@@ -31,6 +31,27 @@ int main(int argc, char *argv[]) {
 		ptrRules = ptrRules->next;
 	}
 
+	var_sets *var_table;
+	fuzzy_set *sets;
+
+	/* iterate over hash elements  */
+	for(var_table=ruleBase->var_table; var_table != NULL; var_table=var_table->hh.next) {
+		printf("\n\nVariable name: %s\n", var_table->var_name);
+		for (sets=var_table->sets_table; sets != NULL; sets=sets->hh.next) {
+			printf("\nValue name: %s\nTuple: ", sets->val_name);
+			for (char i=0; i<4; ++i) {
+				printf(" %d ", sets->tuple[i]);
+			}
+		}
+
+	}
+	printf("\nMeasurements: \n");
+
+	measurement *m;
+	for (m=ruleBase->measurements; m!= NULL; m=m->next) {
+		printf("\nVariable name: %s\nValue: %lf\n", m->var_name, m->value);
+	}
+
 	fclose(ptr_rules);
 
 	return 0;

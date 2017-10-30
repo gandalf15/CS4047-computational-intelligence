@@ -1,3 +1,4 @@
+#include "uthash.h"
 #if !defined TRUE && FALSE
 #define TRUE 1
 #define FALSE 0
@@ -18,21 +19,23 @@ typedef struct rule_node {
 } rule_node;
 
 typedef struct fuzzy_set {
-	char *val_name;	// value name
+	char *val_name;	// value name is also hash KEY
 	int tuple[4];	// tuple representing the set
-	struct fuzzy_set *next;	// pointer to next fuzzy set
+	UT_hash_handle hh;	// makes this structure hashable
 } fuzzy_set;
 
 typedef struct variable_fuzzy_sets {
-	char *var_name;	// nameof the variable which has many fuzzy sets
-	fuzzy_set *set;	// values of fuzzy set
-	//struct variable_fuzzy_sets *next;	// pointer to next variable fuzzy sets list
+	// nameof the variable which has many fuzzy sets.
+	char *var_name;	// Also it's hash KEY
+	struct fuzzy_set *sets_table;	// values of fuzzy sets in hash table
+	UT_hash_handle hh;	// makes this structure hashable
 } var_sets;
 
 typedef struct rule_base {
 	char *name;	// name of rulebase
 	rule_node *rule_list;	// list of rules in rule base
-	var_sets *sets_list;	//	list of variables that each has a list of sets
+	struct variable_fuzzy_sets *var_table;	//	hash table of variables that each has a hash table of sets
+	struct measurement *measurements;
 } rule_base;
 
 typedef struct measurement {
@@ -44,11 +47,7 @@ typedef struct measurement {
 // function prototypes
 // load rules loads rule base from a file and return pointer to it
 rule_base* loadRuleBase (FILE *f_name);
-/*
+
 //	insert node to list
-var_val_pair* insertVarValPair (var_val_pair **head, var_val_pair **tail, char *nema, char *value, char *con);
-rule_node* insertRuleNode (rule_node **head, int num);
-fuzzy_set* insertFuzzySet (fuzzy_set **head, char *val_name, int *tuple);
-var_sets* insertVarSets (var_sets **head, char *var_name, fuzzy_set *set);
-measurement* insertMeasurement (measurement **head, char *var_name, double value);
-*/
+void insertMeasurement (measurement **head, char *var_name, double value);
+
