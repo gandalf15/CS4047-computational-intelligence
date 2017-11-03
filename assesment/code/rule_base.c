@@ -1,29 +1,27 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 #include "rule_base.h"
 
 #define BUF_SIZE 1000	// buffer for one line of characters
 
+// it will terminate a string with proper char '\0'
+void copyString (char **dest, char *src) {
+	int strlength = strlen(src);
+	*dest = malloc(strlength+1*sizeof(char));
+	memcpy(*dest, src, strlength);
+	(*dest)[strlength] = '\0';
+}
+
 void insertVarValPair (var_val_pair **head, var_val_pair **tail, char *name, char *value, char *con) {
 	var_val_pair *ptrNewNode = calloc(1,sizeof(var_val_pair));
-	if (ptrNewNode == NULL) {
+	if (!ptrNewNode) {
 		printf("\nNot enough memory.");
 		return;
 	}
-	int strlength = strlen(name);
-	ptrNewNode->name = calloc(strlength+1,sizeof(char));
-	strncpy(ptrNewNode->name, name, strlength);
-	ptrNewNode->name[strlength] = '\0';
-	strlength = strlen(value);
-	ptrNewNode->value = calloc(strlength+1,sizeof(char));
-	strncpy(ptrNewNode->value, value, strlength);
-	ptrNewNode->value[strlength] = '\0';
+
+	copyString(&ptrNewNode->name, name);
+	copyString(&ptrNewNode->value, value);
+
 	if (con != NULL) {
-		strlength = strlen(con);
-		ptrNewNode->connective = calloc(strlength+1, sizeof(char));
-		strncpy(ptrNewNode->connective, con, strlength);
-		ptrNewNode->connective[strlength] = '\0';
+		copyString(&ptrNewNode->connective, con);
 	}
 	else {
 		ptrNewNode->connective = '\0';
@@ -40,7 +38,7 @@ void insertVarValPair (var_val_pair **head, var_val_pair **tail, char *name, cha
 
 void insertRuleNode (rule_node **head, int num) {
 	rule_node *ptrNewNode = calloc(1,sizeof(rule_node));
-	if (ptrNewNode == NULL) {
+	if (!ptrNewNode) {
 		printf("\nNot enough memory.");
 		return;
 	}
@@ -52,18 +50,16 @@ void insertRuleNode (rule_node **head, int num) {
 void addFuzzySet (fuzzy_set **sets_table, char *val_name, int *tuple) {
 	fuzzy_set *ptrNewFuzzySet;
 	HASH_FIND_STR(*sets_table, val_name, ptrNewFuzzySet);
-	if (ptrNewFuzzySet == NULL) {
-		fuzzy_set *ptrNewFuzzySet = calloc(1,sizeof(fuzzy_set));
-		if (ptrNewFuzzySet == NULL) {
+	if (!ptrNewFuzzySet) {
+		ptrNewFuzzySet = calloc(1,sizeof(fuzzy_set));
+		if (!ptrNewFuzzySet) {
 			printf("\nNot enough memory.");
 			return;
 		}
-		int strlength = strlen(val_name);
-		ptrNewFuzzySet->val_name = calloc(strlength+1,sizeof(char));
-		strncpy(ptrNewFuzzySet->val_name, val_name, strlength);
-		ptrNewFuzzySet->val_name[strlength] = '\0';
+		copyString(&ptrNewFuzzySet->val_name, val_name);
 		memcpy(ptrNewFuzzySet->tuple, tuple, 4 * sizeof(int));
-		HASH_ADD_KEYPTR(hh,*sets_table, ptrNewFuzzySet->val_name, strlength, ptrNewFuzzySet);
+		HASH_ADD_KEYPTR(hh,*sets_table, ptrNewFuzzySet->val_name, 
+						strlen(ptrNewFuzzySet->val_name), ptrNewFuzzySet);
 		return;
 	}
 	printf("\nThe hash table %s already exist. The original remains!\n", val_name);
@@ -78,18 +74,16 @@ fuzzy_set* findFuzzySet (fuzzy_set **sets_table, char *val_name) {
 var_sets* addVarSets (var_sets **var_table, char *var_name) {
 	var_sets *ptrNewVarSets;
 	HASH_FIND_STR(*var_table, var_name, ptrNewVarSets);
-	if (ptrNewVarSets == NULL) {
+	if (!ptrNewVarSets) {
 		ptrNewVarSets = calloc(1,sizeof(var_sets));
-		if (ptrNewVarSets == NULL) {
+		if (!ptrNewVarSets) {
 			printf("\nNot enough memory.");
 			return NULL;
 		}
-		int strlength = strlen(var_name);
-		ptrNewVarSets->var_name = calloc(strlength+1,sizeof(char));
-		strncpy(ptrNewVarSets->var_name, var_name, strlength);
-		ptrNewVarSets->var_name[strlength] = '\0';
+		copyString(&ptrNewVarSets->var_name, var_name);
 		ptrNewVarSets->sets_table = NULL;
-		HASH_ADD_KEYPTR(hh,*var_table, ptrNewVarSets->var_name, strlength, ptrNewVarSets);
+		HASH_ADD_KEYPTR(hh,*var_table, ptrNewVarSets->var_name, 
+						strlen(ptrNewVarSets->var_name), ptrNewVarSets);
 		return ptrNewVarSets;
 	}
 	printf("\nThe hash table %s already exist. The original remains!\n", var_name);
@@ -103,14 +97,11 @@ var_sets* findVarSets (var_sets **var_table, char *var_name) {
 
 void insertMeasurement (measurement **head, char *var_name, double value) {
 	measurement *ptrNewNode = calloc(1,sizeof(measurement));
-	if (ptrNewNode == NULL) {
+	if (!ptrNewNode) {
 		printf("\nNot enough memory.");
 		return;
 	}
-	int strlength = strlen(var_name);
-	ptrNewNode->var_name = calloc(strlength+1,sizeof(char));
-	strncpy(ptrNewNode->var_name, var_name, strlength);
-	ptrNewNode->var_name[strlength] = '\0';
+	copyString(&ptrNewNode->var_name, var_name);
 	ptrNewNode->value = value;
 	ptrNewNode->next = *head;
 	*head = ptrNewNode;
@@ -179,27 +170,18 @@ rule_base* loadRuleBase (FILE *f_rules) {
 								char *con;
 								while (token != NULL) {
 									// copy variable name
-									strlength = strlen(token);
-									var_name = calloc(strlength+1, sizeof(char));
-									strncpy(var_name, token, strlength);
-									var_name[strlength] = '\0';
+									copyString(&var_name, token);
 									// get new token which is value of the variable
  									token = get_next_rule_token(&strtok, token);
-									strlength = strlen(token);
-									value_name = calloc(strlength+1, sizeof(char));
-									strncpy(value_name, token, strlength);
-									value_name[strlength] = '\0';
+									copyString(&value_name, token);
 									// get new token which is either [and | or | then | EOL]
  									token = get_next_rule_token(&strtok, token);
 									if (token != NULL) {
-										strlength = strlen(token);
-										con = calloc(strlength+1, sizeof(char));
-										strncpy(con, token, strlen(token));
-										con[strlength] = '\0';
+										copyString(&con, token);
 									}
 									// create new variable value pair for the rule
-									insertVarValPair( &(ptrRuleBase->rule_list->head_of_rules), 
-														&(ptrRuleBase->rule_list->tail_of_rules), 
+									insertVarValPair( &(ptrRuleBase->rule_list->head_of_rule), 
+														&(ptrRuleBase->rule_list->tail_of_rule), 
 														var_name, value_name, con );
 									free(var_name);
 									var_name = NULL;
@@ -223,14 +205,11 @@ rule_base* loadRuleBase (FILE *f_rules) {
 					// working with variable names and their sets
 					token = strtok(line, " ");
 					char *prev_token;
-					strlength = strlen(token);
-					prev_token = calloc(strlength+1, sizeof(char));
-					strncpy(prev_token, token, strlength);
-					prev_token[strlength] = '\0';
+					copyString(&prev_token, token);
 
 					token = strtok(NULL, " ");
 					// there is only variable name, create new hash entry for it
-					if (token == NULL) {
+					if (!token) {
 						var_table = addVarSets(&(ptrRuleBase->var_table), prev_token);
 					}
 					else {
@@ -239,10 +218,8 @@ rule_base* loadRuleBase (FILE *f_rules) {
 						if (strcmp(token, "=") == 0){
 							char *var_name;
 							double value;
-							strlength = strlen(prev_token);
-							char *m_var_name = calloc(strlength+1, sizeof(char));
-							strncpy(m_var_name, prev_token, strlength);
-							m_var_name[strlength] = '\0';
+							char *m_var_name;
+							copyString(&m_var_name, prev_token);
 							token = strtok(NULL, " ");
 							if (sscanf(token, "%lf", &value) == 1) {
 								insertMeasurement(&(ptrRuleBase->measurements), m_var_name, value);						
@@ -253,10 +230,8 @@ rule_base* loadRuleBase (FILE *f_rules) {
 						}
 						else{
 							// copy the name of value
-							strlength = strlen(prev_token);
-							char *val_name = calloc(strlength+1, sizeof(char));
-							strncpy(val_name, prev_token, strlength);
-							val_name[strlength] = '\0';
+							char *val_name;
+							copyString(&val_name, prev_token);
 							// copy the tuple values
 							int tuple[4];
 							for (int i=0; i<4; ++i) {
@@ -269,6 +244,7 @@ rule_base* loadRuleBase (FILE *f_rules) {
 							}
 							// now add new fuzzy set for the variable
 							addFuzzySet(&(var_table->sets_table), val_name, tuple);
+							var_table->number_of_sets += 1;	// keep track of how many sets certain variable has
 						}
 					}
 				}
@@ -282,7 +258,5 @@ rule_base* loadRuleBase (FILE *f_rules) {
 		printf("\nProblem has occured while loading rule base file.\n");
 		return NULL;
 	}
-
-
 	return ptrRuleBase;
 }

@@ -1,7 +1,10 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "rule_base.h"
+#include "fuzzifier.h"
+
 int main(int argc, char *argv[]) {
 	FILE *ptr_rules;
 	rule_base *ruleBase;
@@ -17,6 +20,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	ruleBase = loadRuleBase(ptr_rules);
+	fclose(ptr_rules);
 	rule_node *ptrRules = ruleBase->rule_list;
 	var_val_pair *ptrPair = ptrRules->head_of_rules;
 	while (ptrRules != NULL) {
@@ -51,8 +55,6 @@ int main(int argc, char *argv[]) {
 	for (m=ruleBase->measurements; m!= NULL; m=m->next) {
 		printf("\nVariable name: %s\nValue: %lf\n", m->var_name, m->value);
 	}
-
-	fclose(ptr_rules);
 
 	return 0;
 }
