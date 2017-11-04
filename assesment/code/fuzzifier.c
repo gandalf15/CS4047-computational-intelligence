@@ -23,7 +23,7 @@ int fuzifyAll(var_sets **dptrVarTable, measurement *measurements) {
             if (currentVarSets != NULL) {
                 for (currentSet = currentVarSets->sets_table; currentSet != NULL; currentSet = currentSet->hh.next) {
                     currentSet->last_fuzzy_val = fuzifySingle(measurements->value, currentSet->tuple);
-                    printf("\nFuzzy value of %s -> %s: %g", measurements->var_name, currentSet->val_name, currentSet->last_fuzzy_val);
+                    //printf("\nFuzzy value of %s -> %s: %g", measurements->var_name, currentSet->val_name, currentSet->last_fuzzy_val);
                 }
             }
             else {

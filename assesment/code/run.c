@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include "rule_base.h"
 #include "fuzzifier.h"
 #include "inf_engine.h"
@@ -19,15 +20,19 @@ int main(int argc, char *argv[]) {
 		printf("\nRule file cannot be opened. Check if it's in same directory\n");
 		return 1;
 	}
-
+	// measure time to calculate it
+	clock_t begin = clock();
 	ruleBase = loadRuleBase(ptr_rules);
 	fclose(ptr_rules);
-
 	fuzifyAll(&ruleBase->var_table, ruleBase->measurements);
 	set_signal *signalsFromEngine = NULL;
 	signalsFromEngine = inferenceEngine(ruleBase->rule_list, &ruleBase->var_table);
 	double output_crisp_val = defuzzify(signalsFromEngine, &ruleBase->var_table);
-	printf("\n\n%lf\n\n",output_crisp_val);
+	// end of measurement
+	clock_t end = clock();
+	double time_spent = ((double)(end - begin) / CLOCKS_PER_SEC)*1000000;
+	printf("\nExecution time in micro sec: %.2lf us", time_spent);
+	printf("\n\nOutput signal: %lf\n\n",output_crisp_val);
 	printf("\nPress Return key to exit\n");
 	getc(stdin);
 	return 0;

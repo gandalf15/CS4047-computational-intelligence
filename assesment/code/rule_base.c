@@ -88,6 +88,7 @@ var_sets* addVarSets (var_sets **var_table, char *var_name) {
 		return ptrNewVarSets;
 	}
 	printf("\nThe hash table %s already exist. The original remains!\n", var_name);
+	return NULL;
 }
 
 var_sets* findVarSets (var_sets **var_table, char *var_name) {
@@ -124,13 +125,9 @@ rule_base* loadRuleBase (FILE *f_rules) {
 	rule_base *ptrRuleBase = calloc(1,sizeof(rule_base));
 
 	char line[BUF_SIZE];
-	int strlength = 0;
 	if (fgets (line, BUF_SIZE, f_rules) != NULL) {
 		// get name of rulebase
-		strlength = strlen(line);
-		ptrRuleBase->name = calloc(strlength+1,sizeof(char));
-		strncpy(ptrRuleBase->name, line, strlength);
-		ptrRuleBase->name[strlength] = '\0';
+		copyString(&ptrRuleBase->name, line);
 		// count empty lines
 		int empty_line_counter = 0;
 		// pointer for token from line
@@ -217,7 +214,6 @@ rule_base* loadRuleBase (FILE *f_rules) {
 						// there is also second token that is tuple or value reading
 						// check if the second token is '='
 						if (strcmp(token, "=") == 0){
-							char *var_name;
 							double value;
 							char *m_var_name;
 							copyString(&m_var_name, prev_token);
@@ -226,7 +222,7 @@ rule_base* loadRuleBase (FILE *f_rules) {
 								insertMeasurement(&(ptrRuleBase->measurements), m_var_name, value);						
 							}
 							else {
-								printf("\nValue reading for variable %s failed!\n", var_name);
+								printf("\nValue reading for variable %s failed!\n", m_var_name);
 							}
 						}
 						else{

@@ -24,7 +24,7 @@ void addSetSignal (set_signal **set_signals_table, char *var_name, char *val_nam
         // there already exist a signal for this value. Do MAX on them and update the signal
         ptrValSignal->out_signal = MAX(ptrValSignal->out_signal, out_signal);
     }
-    printf("\n\nInf engine: Variable: %s\nValue: %s\nSignal: %g", ptrValSignal->var_name, ptrValSignal->val_name, ptrValSignal->out_signal);
+    //printf("\n\nInf engine: Variable: %s\nValue: %s\nSignal: %g", ptrValSignal->var_name, ptrValSignal->val_name, ptrValSignal->out_signal);
 }
 
 
@@ -35,7 +35,6 @@ set_signal *inferenceEngine(rule_node *ptrRules, var_sets **dptrVarTable) {
     var_val_pair *ptrRulePair;
     var_sets *ptrVariableSets;
     fuzzy_set *val_set;
-    char *prevCon;  // previous connective
     double OutSignal = 0;
     
     // while there is a rule in the list
