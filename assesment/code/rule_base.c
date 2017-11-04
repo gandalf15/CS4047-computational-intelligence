@@ -11,7 +11,7 @@ void copyString (char **dest, char *src) {
 }
 
 void insertVarValPair (var_val_pair **head, var_val_pair **tail, char *name, char *value, char *con) {
-	var_val_pair *ptrNewNode = calloc(1,sizeof(var_val_pair));
+	var_val_pair *ptrNewNode = malloc(sizeof(var_val_pair));
 	if (!ptrNewNode) {
 		printf("\nNot enough memory.");
 		return;
@@ -24,7 +24,8 @@ void insertVarValPair (var_val_pair **head, var_val_pair **tail, char *name, cha
 		copyString(&ptrNewNode->connective, con);
 	}
 	else {
-		ptrNewNode->connective = '\0';
+		ptrNewNode->connective = malloc(sizeof(char));
+		*(ptrNewNode->connective) = '\0';
 	}
 	if (*head == NULL) {
 		*head = ptrNewNode;
