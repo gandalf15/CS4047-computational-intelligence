@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	printf("\nExecution time including loading the rule base: %.2lf \xC2\xB5s", time_spent_all);
 	printf("\nExecution time calculation: %.2lf \xC2\xB5s", time_spent_calc);
 	printf("\n\nOutput signal: %lf\n\n",output_crisp_val);
-	printf("\nPress Return key to exit\n");
-	getc(stdin);
+	//printf("\nPress Return key to exit\n");
+	//getc(stdin);
 	return 0;
 }

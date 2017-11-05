@@ -7,8 +7,14 @@
 double* areaAndCentroid(double signal, int *tuple) {
     double a, b, c, x1, x2;
     double *results = malloc(sizeof(double)*2);
-    x1 = (signal + (tuple[0]/tuple[2]) -1) * tuple[2];
-    x2 = (-signal + (tuple[0]/tuple[2]) +1) * tuple[3];
+    if (tuple[2] == 0) {
+        x1 = tuple[0];
+    }
+    else x1 = (signal + (tuple[0]/tuple[2]) -1) * tuple[2];
+    if (tuple[3] == 0) {
+        x2 = tuple[1];
+    }
+    else x2 = (-signal + (tuple[1]/tuple[3]) +1) * tuple[3];
     a = x2-x1;
     b = abs( (tuple[0] - tuple[2]) - (tuple[1] + tuple[3]) );
     c = x1 - (tuple[0]-tuple[2]);
