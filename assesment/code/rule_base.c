@@ -1,7 +1,7 @@
 #include "rule_base.h"
 #include <ctype.h>
 
-#define BUF_SIZE 500	// buffer for one line of characters
+#define BUF_SIZE 1000	// buffer for one line of characters
 
 // it will terminate a string with proper char '\0'
 void copyString (char **dest, char *src) {

@@ -1,0 +1,40 @@
+washingRulebase
+
+Rule 1 If the weight is light or dirt is low then detergent is little
+Rule 2 If the weight is light and dirt is medium then detergent is little
+Rule 3 If the weight is light and dirt is medium and program is fast then detergent is normal
+Rule 4 If the weight is light and dirt is high then detergent is normal
+Rule 5 If the weight is medium and dirt is low then detergent is little
+Rule 6 If the weight is medium and dirt is medium and program is eco then detergent is little
+Rule 7 If the weight is medium and dirt is medium and program is fast then detergent is normal
+Rule 8 If the weight is heavy or program is fast then detergent is normal
+Rule 9 If the weight is heavy and dirt is low and program is eco then detergent is little
+Rule 10 If the weight is heavy and dirt is medium and program is eco then detergent is normal
+Rule 11 If the weight is heavy and dirt is high then detergent is normal
+Rule 12 If the weight is heavy and dirt is high and program is fast then detergent is normal
+
+weight
+
+light 0 1500 0 500
+medium 2000 3500 500 500
+heavy 4000 5000 800 0
+
+dirt
+
+low 0 500 0 500
+medium 500 1500 500 1000
+high 3000 5000 200 0
+
+program
+
+eco 0 0 0 5
+fast 5 5 5 0
+
+detergent
+
+little 0 20 0 15
+normal 50 50 15 20
+
+dirt = 5000
+weight = 5000
+program = 5
