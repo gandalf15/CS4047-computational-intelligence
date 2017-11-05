@@ -1,6 +1,7 @@
 #include "rule_base.h"
+#include <ctype.h>
 
-#define BUF_SIZE 1000	// buffer for one line of characters
+#define BUF_SIZE 500	// buffer for one line of characters
 
 // it will terminate a string with proper char '\0'
 void copyString (char **dest, char *src) {
@@ -136,14 +137,15 @@ rule_base* loadRuleBase (FILE *f_rules) {
 		// while there is a line read it to the buffer 'line'
 		while (fgets (line, BUF_SIZE, f_rules) != NULL) {
 			if (strcmp(line, "\n") != 0) {
+				for (char *p = line; *p; ++p) *p = tolower(*p);
 				// get rid of '\n' char at the end of the line
 				line[strlen(line)-1] = ' ';
 				// if empty line counter is 1 then Rule section starts here
 				if (empty_line_counter == 1) {
 					// working in rule section
 					token = strtok(line, " ");
-					// check if the keyword Rule is there
-					if (strcmp(token, "Rule") == 0) {
+					// check if the keyword 'rule' is there
+					if (strcmp(token, "rule") == 0) {
 						// get rule number
 						token = strtok(NULL, " ");
 						int rule_num;
@@ -152,8 +154,8 @@ rule_base* loadRuleBase (FILE *f_rules) {
 							insertRuleNode( &(ptrRuleBase->rule_list), rule_num);
 							// get next token which should be If
 							token = strtok(NULL, " ");
-							// check 'If' token
-							if (strcmp(token, "If") == 0) {
+							// check 'if' token
+							if (strcmp(token, "if") == 0) {
 								// get next token which should be 'the' or name of variable
 								token = strtok(NULL, " ");
 								// if there is 'the' just ignore it and get new token
