@@ -3,8 +3,8 @@
 
 #include "rule_base.h"
 
-double fuzifySingle(double value, int *tuple);
+double fuzzifySingle(double value, int *tuple);
 
-int fuzifyAll(var_sets **dptrVarTable, measurement *measurements);
+int fuzzifyAll(var_sets **dptrVarTable, measurement *measurements);
 
 #endif

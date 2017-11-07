@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	ruleBase = loadRuleBase(ptr_rules);
 	fclose(ptr_rules);
 	clock_t mid_time = clock();
-	fuzifyAll(&ruleBase->var_table, ruleBase->measurements);
+	fuzzifyAll(&ruleBase->var_table, ruleBase->measurements);
 	set_signal *signalsFromEngine = NULL;
 	signalsFromEngine = inferenceEngine(ruleBase->rule_list, &ruleBase->var_table);
 	double output_crisp_val = defuzzify(signalsFromEngine, &ruleBase->var_table);

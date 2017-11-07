@@ -21,7 +21,7 @@ double* areaAndCentroid(double signal, int *tuple) {
     // calculate the area
     results[0] = ((a+b)/2)*signal;
     //calculate the centroid
-    results[1] = ( (2*a*c)+(a*a)+(c*b)+(a*b)+(b*b) ) / (3*(a+b));
+    results[1] = ( (2*a*c)+(a*a)+(c*b)+(a*b)+(b*b) ) / (3*(a+b) );
     // convert the number to graph x coordinates
     results[1] = results[1] + (tuple[0]-tuple[2]);
     return results;

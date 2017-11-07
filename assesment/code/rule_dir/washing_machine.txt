@@ -37,4 +37,4 @@ normal 50 50 20 10
 
 weight = 3000
 dirt = 3000
-program = 4
+program = 6

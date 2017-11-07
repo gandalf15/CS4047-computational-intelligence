@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
 	ruleBase = loadRuleBase(ptr_rules);
 	fclose(ptr_rules);
 	rule_node *ptrRules = ruleBase->rule_list;
-	var_val_pair *ptrPair = ptrRules->head_of_rules;
+	var_val_pair *ptrPair = ptrRules->head_of_rule;
 	while (ptrRules != NULL) {
 		printf("\nRule number %d:\n", ptrRules->num);
-		ptrPair = ptrRules->head_of_rules;
+		ptrPair = ptrRules->head_of_rule;
 		while (ptrPair != NULL) {
 			printf("%s\n", ptrPair->name);
 			printf("%s\n", ptrPair->value);
